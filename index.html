@@ -208,6 +208,60 @@
       color: white;
       border: none;
     }
+
+    /* ----------------------------------------
+       Galaxy S10 (360 × 760) – Android 11
+       and similar small-width phones
+    -----------------------------------------*/
+    @media screen and (max-width: 380px) {
+      body {
+        padding: 16px;              /* reduce side padding on narrow screens */
+      }
+
+      .wrapper {
+        flex-direction: column;     /* stack form and receipt */
+        align-items: center;
+        gap: 20px;
+      }
+
+      .left-panel {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      #receipt {
+        width: 100%;                /* fill phone width */
+        max-width: 360px;           /* keep your exact design width */
+        margin: 0 auto;
+      }
+    }
+
+    /* ----------------------------------------
+       Galaxy S10+ / S11+ (412 × 869) – Android 11
+       and similar tall Samsung devices
+    -----------------------------------------*/
+    @media screen and (min-width: 381px) and (max-width: 430px) {
+      body {
+        padding: 16px;
+      }
+
+      .wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .left-panel {
+        width: 100%;
+        max-width: 390px;
+      }
+
+      #receipt {
+        width: 100%;
+        max-width: 360px;          /* still your original mock width */
+        margin: 0 auto;
+      }
+    }
   </style>
 </head>
 <body>
