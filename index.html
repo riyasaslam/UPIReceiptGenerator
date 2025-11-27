@@ -41,9 +41,10 @@
       padding: 16px;
     }
 
+    /* MOBILE-FIRST: stack one by one */
     .wrapper {
       display: flex;
-      flex-direction: column;        /* MOBILE FIRST: stacked one by one */
+      flex-direction: column;
       gap: 24px;
       width: 100%;
       max-width: 1000px;
@@ -114,7 +115,7 @@
       color: white;
     }
 
-    /* RECEIPT (FIXED SIZE FOR EXPORT) */
+    /* RECEIPT (fixed desktop style – SAME everywhere) */
     #receipt {
       width: 100%;
       max-width: 360px;  /* exact mock width */
@@ -124,7 +125,6 @@
       padding: 32px 28px 24px;
     }
 
-    /* REPLACED ICON (your image) */
     .status-image {
       width: 120px;
       height: 120px;
@@ -219,7 +219,15 @@
         padding: 12px;
       }
 
+      .wrapper {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+      }
+
       .left-panel {
+        width: 100%;
+        max-width: 420px;
         padding: 18px 14px;
         border-radius: 20px;
       }
@@ -238,22 +246,10 @@
         font-size: 13px;
       }
 
+      /* IMPORTANT: no changes to #receipt, .amount, .actions, .btn
+         so the card looks EXACTLY like desktop */
       #receipt {
         margin: 0 auto;
-        padding: 28px 20px 22px;
-      }
-
-      .amount {
-        font-size: 34px;
-        margin-bottom: 52px;
-      }
-
-      .actions {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
       }
     }
 
@@ -342,7 +338,6 @@
   <!-- RIGHT RECEIPT -->
   <div id="receipt">
     
-    <!-- YOUR IMAGE REPLACING STATUS ICON -->
     <div class="status-image">
       <img src="Status_Icon.png" alt="Success Icon">
     </div>
@@ -358,7 +353,7 @@
     </div>
 
     <div class="meta">
-      <span id="displayDateTime">15 October 2025 • 02:55PM</span><br/>
+      <span id="displayDateTime">15 November 2025 • 02:55PM</span><br/>
       UPI TransactionID: <span id="displayTxn">529650921231</span>
     </div>
 
@@ -403,7 +398,7 @@
 
     const dateVal = document.getElementById("date").value;
     const timeVal = document.getElementById("time").value;
-    const formatted = formatDateTime(dateVal, timeVal) || "15 October 2025 • 02:55PM";
+    const formatted = formatDateTime(dateVal, timeVal) || "15 November 2025 • 02:55PM";
     document.getElementById("displayDateTime").textContent = formatted;
   };
 
