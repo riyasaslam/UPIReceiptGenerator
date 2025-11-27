@@ -36,43 +36,45 @@
       background: var(--bg);
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
-      padding: 24px;
+      padding: 16px;
     }
 
     .wrapper {
       display: flex;
-      gap: 32px;
+      flex-direction: column;        /* MOBILE FIRST: stacked one by one */
+      gap: 24px;
       width: 100%;
       max-width: 1000px;
-      align-items: flex-start;
-      justify-content: center;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     /* LEFT PANEL */
     .left-panel {
-      flex: 1;
-      max-width: 380px;
+      width: 100%;
+      max-width: 420px;
       background: #ffffff;
       border-radius: 24px;
-      padding: 24px 20px;
+      padding: 20px 18px;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
     }
 
     .left-panel h2 {
       font-size: 20px;
       font-weight: 700;
-      margin-bottom: 36px;
+      margin-bottom: 24px;
+      text-align: left;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
       display: block;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--secondary-text);
       margin-bottom: 6px;
@@ -112,9 +114,10 @@
       color: white;
     }
 
-    /* RECEIPT (FIXED SIZE) */
+    /* RECEIPT (FIXED SIZE FOR EXPORT) */
     #receipt {
-      width: 360px;
+      width: 100%;
+      max-width: 360px;  /* exact mock width */
       background: var(--card-bg);
       border-radius: 32px;
       box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
@@ -201,6 +204,7 @@
       font-weight: 600;
       border: 1px solid var(--border-color);
       cursor: pointer;
+      background: #ffffff;
     }
 
     .btn-primary {
@@ -209,57 +213,89 @@
       border: none;
     }
 
-    /* ----------------------------------------
-       Galaxy S10 (360 × 760) – Android 11
-       and similar small-width phones
-    -----------------------------------------*/
-    @media screen and (max-width: 380px) {
+    /* ----------- SMALL PHONES (Samsung S10/S11+, etc.) ----------- */
+    @media screen and (max-width: 480px) {
       body {
-        padding: 16px;              /* reduce side padding on narrow screens */
-      }
-
-      .wrapper {
-        flex-direction: column;     /* stack form and receipt */
-        align-items: center;
-        gap: 20px;
+        padding: 12px;
       }
 
       .left-panel {
-        width: 100%;
-        max-width: 360px;
+        padding: 18px 14px;
+        border-radius: 20px;
+      }
+
+      .left-panel h2 {
+        font-size: 18px;
+        margin-bottom: 18px;
+        text-align: center;
+      }
+
+      .form-group label {
+        font-size: 12px;
+      }
+
+      .form-group input {
+        font-size: 13px;
       }
 
       #receipt {
-        width: 100%;                /* fill phone width */
-        max-width: 360px;           /* keep your exact design width */
         margin: 0 auto;
+        padding: 28px 20px 22px;
+      }
+
+      .amount {
+        font-size: 34px;
+        margin-bottom: 52px;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
       }
     }
 
-    /* ----------------------------------------
-       Galaxy S10+ / S11+ (412 × 869) – Android 11
-       and similar tall Samsung devices
-    -----------------------------------------*/
-    @media screen and (min-width: 381px) and (max-width: 430px) {
+    /* ----------- TABLET / SMALL LAPTOP ----------- */
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
       body {
-        padding: 16px;
+        padding: 20px;
       }
 
       .wrapper {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
+        gap: 28px;
       }
 
       .left-panel {
-        width: 100%;
-        max-width: 390px;
+        max-width: 380px;
       }
 
       #receipt {
-        width: 100%;
-        max-width: 360px;          /* still your original mock width */
-        margin: 0 auto;
+        max-width: 360px;
+      }
+    }
+
+    /* ----------- DESKTOP: SIDE BY SIDE ----------- */
+    @media screen and (min-width: 1024px) {
+      body {
+        padding: 24px;
+        align-items: center;
+      }
+
+      .wrapper {
+        flex-direction: row;     /* side-by-side on desktop */
+        align-items: flex-start;
+        justify-content: center;
+        gap: 32px;
+      }
+
+      .left-panel {
+        max-width: 380px;
+      }
+
+      #receipt {
+        max-width: 360px;
       }
     }
   </style>
@@ -340,21 +376,35 @@
 
 <script>
   function formatDateTime(date, time) {
-    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const months = [
+      "January","February","March","April","May","June",
+      "July","August","September","October","November","December"
+    ];
     const d = new Date(date + "T" + time);
+    if (isNaN(d.getTime())) {
+      return "";
+    }
     let hrs = d.getHours();
     const mins = d.getMinutes().toString().padStart(2, "0");
     const ampm = hrs >= 12 ? "PM" : "AM";
     hrs = hrs % 12 || 12;
-    return `${d.getDate()} ${months[d.getMonth()]}${d.getFullYear()} • ${hrs}:${mins}${ampm}`;
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} • ${hrs}:${mins}${ampm}`;
   }
 
   document.getElementById("btnGenerate").onclick = () => {
-    document.getElementById("displayPayTo").textContent = document.getElementById("payTo").value;
-    document.getElementById("displayAmount").textContent = document.getElementById("amount").value;
-    document.getElementById("displayTxn").textContent = document.getElementById("txnId").value;
-    document.getElementById("displayDateTime").textContent =
-      formatDateTime(document.getElementById("date").value, document.getElementById("time").value);
+    document.getElementById("displayPayTo").textContent =
+      document.getElementById("payTo").value || "Recepient Name";
+
+    document.getElementById("displayAmount").textContent =
+      document.getElementById("amount").value || "0";
+
+    document.getElementById("displayTxn").textContent =
+      document.getElementById("txnId").value || "529650921231";
+
+    const dateVal = document.getElementById("date").value;
+    const timeVal = document.getElementById("time").value;
+    const formatted = formatDateTime(dateVal, timeVal) || "15 October 2025 • 02:55PM";
+    document.getElementById("displayDateTime").textContent = formatted;
   };
 
   // Download exact JPG
