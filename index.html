@@ -36,46 +36,43 @@
       background: var(--bg);
       min-height: 100vh;
       display: flex;
-      align-items: stretch;
+      align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 24px;
     }
 
-    /* MOBILE-FIRST: stack one by one */
     .wrapper {
       display: flex;
-      flex-direction: column;
-      gap: 24px;
+      gap: 32px;
       width: 100%;
       max-width: 1000px;
-      align-items: center;
-      justify-content: flex-start;
+      align-items: flex-start;
+      justify-content: center;
     }
 
     /* LEFT PANEL */
     .left-panel {
-      width: 100%;
-      max-width: 420px;
+      flex: 1;
+      max-width: 380px;
       background: #ffffff;
       border-radius: 24px;
-      padding: 20px 18px;
+      padding: 24px 20px;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
     }
 
     .left-panel h2 {
       font-size: 20px;
       font-weight: 700;
-      margin-bottom: 24px;
-      text-align: left;
+      margin-bottom: 36px;
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
 
     .form-group label {
       display: block;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--secondary-text);
       margin-bottom: 6px;
@@ -115,16 +112,16 @@
       color: white;
     }
 
-    /* RECEIPT (fixed desktop style – SAME everywhere) */
+    /* RECEIPT (FIXED SIZE) */
     #receipt {
-      width: 100%;
-      max-width: 360px;  /* exact mock width */
+      width: 360px;
       background: var(--card-bg);
       border-radius: 32px;
       box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
       padding: 32px 28px 24px;
     }
 
+    /* REPLACED ICON (your image) */
     .status-image {
       width: 120px;
       height: 120px;
@@ -204,95 +201,12 @@
       font-weight: 600;
       border: 1px solid var(--border-color);
       cursor: pointer;
-      background: #ffffff;
     }
 
     .btn-primary {
       background: var(--accent-green);
       color: white;
       border: none;
-    }
-
-    /* ----------- SMALL PHONES (Samsung S10/S11+, etc.) ----------- */
-    @media screen and (max-width: 480px) {
-      body {
-        padding: 12px;
-      }
-
-      .wrapper {
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
-      }
-
-      .left-panel {
-        width: 100%;
-        max-width: 420px;
-        padding: 18px 14px;
-        border-radius: 20px;
-      }
-
-      .left-panel h2 {
-        font-size: 18px;
-        margin-bottom: 18px;
-        text-align: center;
-      }
-
-      .form-group label {
-        font-size: 12px;
-      }
-
-      .form-group input {
-        font-size: 13px;
-      }
-
-      /* IMPORTANT: no changes to #receipt, .amount, .actions, .btn
-         so the card looks EXACTLY like desktop */
-      #receipt {
-        margin: 0 auto;
-      }
-    }
-
-    /* ----------- TABLET / SMALL LAPTOP ----------- */
-    @media screen and (min-width: 768px) and (max-width: 1023px) {
-      body {
-        padding: 20px;
-      }
-
-      .wrapper {
-        gap: 28px;
-      }
-
-      .left-panel {
-        max-width: 380px;
-      }
-
-      #receipt {
-        max-width: 360px;
-      }
-    }
-
-    /* ----------- DESKTOP: SIDE BY SIDE ----------- */
-    @media screen and (min-width: 1024px) {
-      body {
-        padding: 24px;
-        align-items: center;
-      }
-
-      .wrapper {
-        flex-direction: row;     /* side-by-side on desktop */
-        align-items: flex-start;
-        justify-content: center;
-        gap: 32px;
-      }
-
-      .left-panel {
-        max-width: 380px;
-      }
-
-      #receipt {
-        max-width: 360px;
-      }
     }
   </style>
 </head>
@@ -338,6 +252,7 @@
   <!-- RIGHT RECEIPT -->
   <div id="receipt">
     
+    <!-- YOUR IMAGE REPLACING STATUS ICON -->
     <div class="status-image">
       <img src="Status_Icon.png" alt="Success Icon">
     </div>
@@ -353,7 +268,7 @@
     </div>
 
     <div class="meta">
-      <span id="displayDateTime">15 November 2025 • 02:55PM</span><br/>
+      <span id="displayDateTime">15 October 2025 • 02:55PM</span><br/>
       UPI TransactionID: <span id="displayTxn">529650921231</span>
     </div>
 
@@ -371,35 +286,21 @@
 
 <script>
   function formatDateTime(date, time) {
-    const months = [
-      "January","February","March","April","May","June",
-      "July","August","September","October","November","December"
-    ];
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     const d = new Date(date + "T" + time);
-    if (isNaN(d.getTime())) {
-      return "";
-    }
     let hrs = d.getHours();
     const mins = d.getMinutes().toString().padStart(2, "0");
     const ampm = hrs >= 12 ? "PM" : "AM";
     hrs = hrs % 12 || 12;
-    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} • ${hrs}:${mins}${ampm}`;
+    return `${d.getDate()} ${months[d.getMonth()]}${d.getFullYear()} • ${hrs}:${mins}${ampm}`;
   }
 
   document.getElementById("btnGenerate").onclick = () => {
-    document.getElementById("displayPayTo").textContent =
-      document.getElementById("payTo").value || "Recepient Name";
-
-    document.getElementById("displayAmount").textContent =
-      document.getElementById("amount").value || "0";
-
-    document.getElementById("displayTxn").textContent =
-      document.getElementById("txnId").value || "529650921231";
-
-    const dateVal = document.getElementById("date").value;
-    const timeVal = document.getElementById("time").value;
-    const formatted = formatDateTime(dateVal, timeVal) || "15 November 2025 • 02:55PM";
-    document.getElementById("displayDateTime").textContent = formatted;
+    document.getElementById("displayPayTo").textContent = document.getElementById("payTo").value;
+    document.getElementById("displayAmount").textContent = document.getElementById("amount").value;
+    document.getElementById("displayTxn").textContent = document.getElementById("txnId").value;
+    document.getElementById("displayDateTime").textContent =
+      formatDateTime(document.getElementById("date").value, document.getElementById("time").value);
   };
 
   // Download exact JPG
